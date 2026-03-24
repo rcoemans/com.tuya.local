@@ -1,0 +1,48 @@
+{
+  "name": {
+    "en": "Tuya Light",
+    "nl": "Tuya Lamp"
+  },
+  "class": "light",
+  "platforms": ["local"],
+  "connectivity": ["lan"],
+  "capabilities": [
+    "onoff",
+    "dim",
+    "light_temperature",
+    "light_hue",
+    "light_saturation",
+    "light_mode"
+  ],
+  "pair": [
+    {
+      "id": "credentials",
+      "navigation": {
+        "next": "validate"
+      }
+    },
+    {
+      "id": "validate",
+      "navigation": {
+        "prev": "credentials",
+        "next": "list_devices"
+      }
+    },
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "repair": [
+    {
+      "id": "repair_credentials"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "name": {
+    "en": "Tuya Fan",
+    "nl": "Tuya Ventilator"
+  },
+  "class": "fan",
+  "platforms": ["local"],
+  "connectivity": ["lan"],
+  "capabilities": [
+    "onoff",
+    "dim"
+  ],
+  "pair": [
+    {
+      "id": "credentials",
+      "navigation": {
+        "next": "validate"
+      }
+    },
+    {
+      "id": "validate",
+      "navigation": {
+        "prev": "credentials",
+        "next": "list_devices"
+      }
+    },
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "repair": [
+    {
+      "id": "repair_credentials"
+    }
+  ]
+}

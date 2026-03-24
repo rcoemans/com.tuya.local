@@ -1,5 +1,6 @@
 {
   "1.0.0": {
-    "en": "First version!"
+    "en": "Initial release with local LAN control for Tuya-based devices. Includes socket, light, fan, and climate drivers with manual pairing, persistent connections, and fallback polling.",
+    "nl": "Eerste release met lokale LAN-besturing voor Tuya-apparaten. Bevat stopcontact-, lamp-, ventilator- en klimaatdrivers met handmatige koppeling, persistente verbindingen en fallback-polling."
   }
 }

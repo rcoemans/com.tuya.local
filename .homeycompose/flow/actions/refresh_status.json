@@ -1,0 +1,18 @@
+{
+  "id": "refresh_status",
+  "title": {
+    "en": "Refresh device status",
+    "nl": "Ververs apparaatstatus"
+  },
+  "hint": {
+    "en": "Request a fresh status update from the Tuya device.",
+    "nl": "Vraag een nieuwe statusupdate op van het Tuya-apparaat."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=socket|light|fan|climate"
+    }
+  ]
+}

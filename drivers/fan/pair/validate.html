@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 20px; color: #333; }
+    h2 { margin-bottom: 8px; }
+    p { color: #666; margin-bottom: 16px; }
+    .status { padding: 12px; border-radius: 6px; margin-bottom: 16px; }
+    .status.info { background: #e8f4f8; color: #0c5460; }
+    .status.success { background: #d4edda; color: #155724; }
+    .status.error { background: #f8d7da; color: #721c24; }
+    .btn { background: #00A6A6; color: #fff; border: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; cursor: pointer; width: 100%; margin-top: 8px; }
+    .btn:hover { background: #008f8f; }
+    .btn:disabled { background: #ccc; cursor: not-allowed; }
+    .dps-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    .dps-table th, .dps-table td { padding: 6px 10px; text-align: left; border-bottom: 1px solid #eee; font-size: 14px; }
+    .dps-table th { font-weight: 600; background: #f5f5f5; }
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid #ccc; border-top-color: #00A6A6; border-radius: 50%; animation: spin 0.6s linear infinite; margin-right: 8px; vertical-align: middle; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <h2 data-i18n="pair.validate.title">Validate Connection</h2>
+  <p data-i18n="pair.validate.description">Testing connection to your Tuya device...</p>
+
+  <div id="statusBox" class="status info">
+    <span class="spinner"></span>
+    <span data-i18n="pair.validate.connecting">Connecting to device...</span>
+  </div>
+
+  <div id="dpsContainer" style="display:none;">
+    <h3 data-i18n="pair.validate.discovered_dps">Discovered Datapoints</h3>
+    <table class="dps-table">
+      <thead><tr><th>DP</th><th data-i18n="pair.validate.value">Value</th><th data-i18n="pair.validate.type">Type</th></tr></thead>
+      <tbody id="dpsBody"></tbody>
+    </table>
+  </div>
+
+  <button id="retryBtn" class="btn" style="display:none;" data-i18n="pair.validate.retry">Retry</button>
+
+  <script>
+    function onHomeyReady(Homey) {
+      Homey.ready();
+
+      var statusBox = document.getElementById('statusBox');
+      var dpsContainer = document.getElementById('dpsContainer');
+      var dpsBody = document.getElementById('dpsBody');
+      var retryBtn = document.getElementById('retryBtn');
+
+      function validate() {
+        statusBox.className = 'status info';
+        statusBox.innerHTML = '<span class="spinner"></span> Connecting to device...';
+        dpsContainer.style.display = 'none';
+        retryBtn.style.display = 'none';
+
+        Homey.emit('validate_connection', null, function(err, result) {
+          if (err) {
+            statusBox.className = 'status error';
+            statusBox.textContent = 'Error: ' + (err.message || err);
+            retryBtn.style.display = 'block';
+            return;
+          }
+
+          if (result && result.success) {
+            statusBox.className = 'status success';
+            statusBox.textContent = 'Connection successful!';
+
+            if (result.dps && Object.keys(result.dps).length > 0) {
+              dpsBody.innerHTML = '';
+              Object.entries(result.dps).forEach(function(entry) {
+                var row = document.createElement('tr');
+                row.innerHTML = '<td>' + entry[0] + '</td><td>' + JSON.stringify(entry[1]) + '</td><td>' + typeof entry[1] + '</td>';
+                dpsBody.appendChild(row);
+              });
+              dpsContainer.style.display = 'block';
+            }
+          } else {
+            statusBox.className = 'status error';
+            statusBox.textContent = 'Connection failed: ' + (result && result.error ? result.error : 'Unknown error');
+            retryBtn.style.display = 'block';
+          }
+        });
+      }
+
+      retryBtn.addEventListener('click', validate);
+      validate();
+    }
+  </script>
+</body>
+</html>

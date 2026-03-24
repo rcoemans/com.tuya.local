@@ -1,0 +1,17 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Voltage",
+    "nl": "Spanning"
+  },
+  "units": {
+    "en": "V",
+    "nl": "V"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/icons/power.svg",
+  "insights": true,
+  "decimals": 1
+}

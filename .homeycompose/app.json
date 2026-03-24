@@ -1,22 +1,29 @@
 {
   "id": "com.tuya.local",
   "version": "1.0.0",
-  "compatibility": ">=12.4.0",
+  "compatibility": ">=12.0.0",
   "sdk": 3,
   "runtime": "nodejs",
   "platforms": [
     "local"
   ],
+  "brandColor": "#00A6A6",
   "name": {
-    "en": "Tuya Direct"
+    "en": "Tuya Direct",
+    "nl": "Tuya Direct"
   },
   "description": {
-    "en": "Adds local LAN control for compatible Tuya-based devices on Homey Pro. Connect devices directly over your local network using their device ID, local key and datapoints for faster status updates and cloud-independent control."
+    "en": "Adds local LAN control for compatible Tuya-based devices on Homey Pro. Connect devices directly over your local network using their device ID, local key and datapoints for faster status updates and cloud-independent control.",
+    "nl": "Voegt lokale LAN-besturing toe voor compatibele Tuya-apparaten op Homey Pro. Verbind apparaten rechtstreeks via je lokale netwerk met hun apparaat-ID, lokale sleutel en datapunten voor snellere statusupdates en cloudloze besturing."
   },
   "category": [
-    "climate"
+    "tools"
   ],
   "permissions": [],
+  "tags": {
+    "en": ["tuya", "local", "lan", "wifi", "smart life", "smart plug", "smart light"],
+    "nl": ["tuya", "lokaal", "lan", "wifi", "smart life", "slimme stekker", "slim licht"]
+  },
   "images": {
     "small": "/assets/images/small.png",
     "large": "/assets/images/large.png",
@@ -25,5 +32,11 @@
   "author": {
     "name": "Robert Coemans",
     "email": "r.coemans@hotmail.com"
+  },
+  "homepage": "https://github.com/rcoemans/com.tuya.local",
+  "support": "https://github.com/rcoemans/com.tuya.local/issues",
+  "source": "https://github.com/rcoemans/com.tuya.local",
+  "bugs": {
+    "url": "https://github.com/rcoemans/com.tuya.local/issues"
   }
 }

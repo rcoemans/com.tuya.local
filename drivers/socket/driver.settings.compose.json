@@ -1,0 +1,72 @@
+[
+  {
+    "type": "group",
+    "label": {
+      "en": "Connection",
+      "nl": "Verbinding"
+    },
+    "children": [
+      {
+        "id": "host",
+        "type": "text",
+        "label": { "en": "Host", "nl": "Host" },
+        "hint": { "en": "IP address or hostname of the Tuya device.", "nl": "IP-adres of hostnaam van het Tuya-apparaat." },
+        "value": ""
+      },
+      {
+        "id": "device_id",
+        "type": "text",
+        "label": { "en": "Device ID", "nl": "Apparaat-ID" },
+        "hint": { "en": "The unique Tuya device identifier.", "nl": "De unieke Tuya apparaat-ID." },
+        "value": ""
+      },
+      {
+        "id": "local_key",
+        "type": "password",
+        "label": { "en": "Local Key", "nl": "Lokale Sleutel" },
+        "hint": { "en": "The local encryption key for the device.", "nl": "De lokale encryptiesleutel voor het apparaat." },
+        "value": ""
+      },
+      {
+        "id": "protocol_version",
+        "type": "dropdown",
+        "label": { "en": "Protocol Version", "nl": "Protocolversie" },
+        "hint": { "en": "The Tuya protocol version used by the device.", "nl": "De Tuya-protocolversie die door het apparaat wordt gebruikt." },
+        "values": [
+          { "id": "auto", "label": { "en": "Auto", "nl": "Automatisch" } },
+          { "id": "3.1", "label": { "en": "3.1", "nl": "3.1" } },
+          { "id": "3.2", "label": { "en": "3.2", "nl": "3.2" } },
+          { "id": "3.3", "label": { "en": "3.3", "nl": "3.3" } },
+          { "id": "3.4", "label": { "en": "3.4", "nl": "3.4" } },
+          { "id": "3.5", "label": { "en": "3.5", "nl": "3.5" } }
+        ],
+        "value": "auto"
+      },
+      {
+        "id": "node_id",
+        "type": "text",
+        "label": { "en": "Node ID", "nl": "Node-ID" },
+        "hint": { "en": "Optional sub-device node ID for hub-connected devices.", "nl": "Optionele node-ID voor apparaten die via een hub zijn verbonden." },
+        "value": ""
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
+      "en": "Polling",
+      "nl": "Polling"
+    },
+    "children": [
+      {
+        "id": "poll_interval",
+        "type": "number",
+        "label": { "en": "Poll Interval (s)", "nl": "Pollinterval (s)" },
+        "hint": { "en": "Fallback polling interval in seconds when the device does not push updates.", "nl": "Fallback-pollinterval in seconden wanneer het apparaat geen updates pusht." },
+        "value": 30,
+        "min": 5,
+        "max": 300
+      }
+    ]
+  }
+]

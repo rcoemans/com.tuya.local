@@ -1,9 +1,15 @@
 {
   "name": "com.tuya.local",
   "version": "1.0.0",
+  "description": "Local LAN control for compatible Tuya-based devices on Homey Pro",
+  "private": true,
+  "main": "app.js",
   "scripts": {
     "build": "tsc",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore ."
+  },
+  "engines": {
+    "node": ">=22"
   },
   "devDependencies": {
     "@tsconfig/node16": "^16.1.8",

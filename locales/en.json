@@ -1,1 +1,55 @@
-{}
+{
+  "errors": {
+    "disconnected": "Disconnected from Tuya device",
+    "connection_failed": "Failed to connect to Tuya device",
+    "command_timeout": "Command timed out",
+    "invalid_credentials": "Invalid device ID or local key",
+    "no_mapping": "No mapping found for capability"
+  },
+  "pair": {
+    "credentials": {
+      "title": "Device Credentials",
+      "description": "Enter the connection details for your Tuya device. You can find these in the Tuya IoT Platform or using tools like tinytuya.",
+      "name": "Device Name",
+      "host": "Host / IP Address",
+      "host_hint": "IP address or hostname of the Tuya device on your local network.",
+      "device_id": "Device ID",
+      "local_key": "Local Key",
+      "protocol_version": "Protocol Version",
+      "node_id": "Node ID (optional)",
+      "node_id_hint": "Only needed for sub-devices connected via a Tuya hub/gateway."
+    },
+    "validate": {
+      "title": "Validate Connection",
+      "description": "Testing connection to your Tuya device...",
+      "connecting": "Connecting to device...",
+      "success": "Connection successful!",
+      "failed": "Connection failed",
+      "retry": "Retry",
+      "discovered_dps": "Discovered Datapoints",
+      "value": "Value",
+      "type": "Type"
+    },
+    "repair": {
+      "title": "Update Connection Details",
+      "description": "Update the host, local key, or protocol version if your device has changed IP or been re-paired.",
+      "save": "Save & Reconnect"
+    }
+  },
+  "settings": {
+    "host": "Host",
+    "host_hint": "IP address or hostname of the Tuya device.",
+    "device_id": "Device ID",
+    "device_id_hint": "The unique Tuya device identifier.",
+    "local_key": "Local Key",
+    "local_key_hint": "The local encryption key for the device.",
+    "protocol_version": "Protocol Version",
+    "protocol_version_hint": "The Tuya protocol version used by the device.",
+    "node_id": "Node ID",
+    "node_id_hint": "Optional sub-device node ID for hub-connected devices.",
+    "poll_interval": "Poll Interval (s)",
+    "poll_interval_hint": "Fallback polling interval in seconds when the device does not push updates.",
+    "connection": "Connection",
+    "polling": "Polling"
+  }
+}

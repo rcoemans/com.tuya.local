@@ -1,0 +1,55 @@
+{
+  "errors": {
+    "disconnected": "Verbinding met Tuya-apparaat verbroken",
+    "connection_failed": "Kan geen verbinding maken met Tuya-apparaat",
+    "command_timeout": "Opdracht verlopen",
+    "invalid_credentials": "Ongeldig apparaat-ID of lokale sleutel",
+    "no_mapping": "Geen mapping gevonden voor capability"
+  },
+  "pair": {
+    "credentials": {
+      "title": "Apparaatgegevens",
+      "description": "Voer de verbindingsgegevens in voor je Tuya-apparaat. Je kunt deze vinden in het Tuya IoT Platform of met tools zoals tinytuya.",
+      "name": "Apparaatnaam",
+      "host": "Host / IP-adres",
+      "host_hint": "IP-adres of hostnaam van het Tuya-apparaat op je lokale netwerk.",
+      "device_id": "Apparaat-ID",
+      "local_key": "Lokale Sleutel",
+      "protocol_version": "Protocolversie",
+      "node_id": "Node-ID (optioneel)",
+      "node_id_hint": "Alleen nodig voor subapparaten die via een Tuya hub/gateway zijn verbonden."
+    },
+    "validate": {
+      "title": "Verbinding Valideren",
+      "description": "Verbinding met je Tuya-apparaat testen...",
+      "connecting": "Verbinden met apparaat...",
+      "success": "Verbinding geslaagd!",
+      "failed": "Verbinding mislukt",
+      "retry": "Opnieuw proberen",
+      "discovered_dps": "Gevonden Datapunten",
+      "value": "Waarde",
+      "type": "Type"
+    },
+    "repair": {
+      "title": "Verbindingsgegevens Bijwerken",
+      "description": "Werk de host, lokale sleutel of protocolversie bij als je apparaat een nieuw IP-adres heeft of opnieuw is gekoppeld.",
+      "save": "Opslaan & Opnieuw Verbinden"
+    }
+  },
+  "settings": {
+    "host": "Host",
+    "host_hint": "IP-adres of hostnaam van het Tuya-apparaat.",
+    "device_id": "Apparaat-ID",
+    "device_id_hint": "De unieke Tuya apparaat-ID.",
+    "local_key": "Lokale Sleutel",
+    "local_key_hint": "De lokale encryptiesleutel voor het apparaat.",
+    "protocol_version": "Protocolversie",
+    "protocol_version_hint": "De Tuya-protocolversie die door het apparaat wordt gebruikt.",
+    "node_id": "Node-ID",
+    "node_id_hint": "Optionele node-ID voor apparaten die via een hub zijn verbonden.",
+    "poll_interval": "Pollinterval (s)",
+    "poll_interval_hint": "Fallback-pollinterval in seconden wanneer het apparaat geen updates pusht.",
+    "connection": "Verbinding",
+    "polling": "Polling"
+  }
+}

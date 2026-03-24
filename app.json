@@ -2,22 +2,29 @@
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.tuya.local",
   "version": "1.0.0",
-  "compatibility": ">=12.4.0",
+  "compatibility": ">=12.0.0",
   "sdk": 3,
   "runtime": "nodejs",
   "platforms": [
     "local"
   ],
+  "brandColor": "#00A6A6",
   "name": {
-    "en": "Tuya Direct"
+    "en": "Tuya Direct",
+    "nl": "Tuya Direct"
   },
   "description": {
-    "en": "Adds local LAN control for compatible Tuya-based devices on Homey Pro. Connect devices directly over your local network using their device ID, local key and datapoints for faster status updates and cloud-independent control."
+    "en": "Adds local LAN control for compatible Tuya-based devices on Homey Pro. Connect devices directly over your local network using their device ID, local key and datapoints for faster status updates and cloud-independent control.",
+    "nl": "Voegt lokale LAN-besturing toe voor compatibele Tuya-apparaten op Homey Pro. Verbind apparaten rechtstreeks via je lokale netwerk met hun apparaat-ID, lokale sleutel en datapunten voor snellere statusupdates en cloudloze besturing."
   },
   "category": [
-    "climate"
+    "tools"
   ],
   "permissions": [],
+  "tags": {
+    "en": ["tuya", "local", "lan", "wifi", "smart life", "smart plug", "smart light"],
+    "nl": ["tuya", "lokaal", "lan", "wifi", "smart life", "slimme stekker", "slim licht"]
+  },
   "images": {
     "small": "/assets/images/small.png",
     "large": "/assets/images/large.png",
@@ -26,5 +33,251 @@
   "author": {
     "name": "Robert Coemans",
     "email": "r.coemans@hotmail.com"
+  },
+  "homepage": "https://github.com/rcoemans/com.tuya.local",
+  "support": "https://github.com/rcoemans/com.tuya.local/issues",
+  "source": "https://github.com/rcoemans/com.tuya.local",
+  "bugs": {
+    "url": "https://github.com/rcoemans/com.tuya.local/issues"
+  },
+  "flow": {
+    "triggers": [
+      {
+        "id": "device_connected",
+        "title": { "en": "Device connected", "nl": "Apparaat verbonden" },
+        "hint": { "en": "Triggers when the Tuya device establishes a local connection.", "nl": "Wordt geactiveerd wanneer het Tuya-apparaat een lokale verbinding tot stand brengt." },
+        "args": [{ "type": "device", "name": "device", "filter": "driver_id=socket|light|fan|climate" }]
+      },
+      {
+        "id": "device_disconnected",
+        "title": { "en": "Device disconnected", "nl": "Apparaat losgekoppeld" },
+        "hint": { "en": "Triggers when the Tuya device loses its local connection.", "nl": "Wordt geactiveerd wanneer het Tuya-apparaat de lokale verbinding verliest." },
+        "args": [{ "type": "device", "name": "device", "filter": "driver_id=socket|light|fan|climate" }]
+      },
+      {
+        "id": "dp_changed",
+        "title": { "en": "A datapoint changed", "nl": "Een datapunt is gewijzigd" },
+        "titleFormatted": { "en": "Datapoint [[dp]] changed", "nl": "Datapunt [[dp]] is gewijzigd" },
+        "hint": { "en": "Triggers when a specific Tuya datapoint value changes.", "nl": "Wordt geactiveerd wanneer een specifiek Tuya-datapuntwaarde verandert." },
+        "args": [
+          { "type": "device", "name": "device", "filter": "driver_id=socket|light|fan|climate" },
+          { "type": "text", "name": "dp", "title": { "en": "Datapoint", "nl": "Datapunt" }, "placeholder": { "en": "e.g. 1", "nl": "bijv. 1" } }
+        ],
+        "tokens": [
+          { "name": "value", "type": "string", "title": { "en": "Value", "nl": "Waarde" }, "example": { "en": "true", "nl": "true" } },
+          { "name": "dp", "type": "string", "title": { "en": "Datapoint", "nl": "Datapunt" }, "example": { "en": "1", "nl": "1" } }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "device_is_connected",
+        "title": { "en": "Device !{{is|is not}} connected", "nl": "Apparaat !{{is|is niet}} verbonden" },
+        "hint": { "en": "Checks if the Tuya device currently has an active local connection.", "nl": "Controleert of het Tuya-apparaat momenteel een actieve lokale verbinding heeft." },
+        "args": [{ "type": "device", "name": "device", "filter": "driver_id=socket|light|fan|climate" }]
+      },
+      {
+        "id": "dp_value_is",
+        "title": { "en": "Datapoint value !{{is|is not}} equal to", "nl": "Datapuntwaarde !{{is|is niet}} gelijk aan" },
+        "titleFormatted": { "en": "Datapoint [[dp]] !{{is|is not}} [[value]]", "nl": "Datapunt [[dp]] !{{is|is niet}} [[value]]" },
+        "hint": { "en": "Checks if a specific Tuya datapoint has a given value.", "nl": "Controleert of een specifiek Tuya-datapunt een bepaalde waarde heeft." },
+        "args": [
+          { "type": "device", "name": "device", "filter": "driver_id=socket|light|fan|climate" },
+          { "type": "text", "name": "dp", "title": { "en": "Datapoint", "nl": "Datapunt" }, "placeholder": { "en": "e.g. 1", "nl": "bijv. 1" } },
+          { "type": "text", "name": "value", "title": { "en": "Value", "nl": "Waarde" }, "placeholder": { "en": "e.g. true", "nl": "bijv. true" } }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "set_dp",
+        "title": { "en": "Set datapoint value", "nl": "Stel datapuntwaarde in" },
+        "titleFormatted": { "en": "Set datapoint [[dp]] to [[value]]", "nl": "Stel datapunt [[dp]] in op [[value]]" },
+        "hint": { "en": "Set a specific Tuya datapoint to a value. For boolean use 'true' or 'false', for numbers use a numeric value.", "nl": "Stel een specifiek Tuya-datapunt in op een waarde. Gebruik voor boolean 'true' of 'false', voor getallen een numerieke waarde." },
+        "args": [
+          { "type": "device", "name": "device", "filter": "driver_id=socket|light|fan|climate" },
+          { "type": "text", "name": "dp", "title": { "en": "Datapoint", "nl": "Datapunt" }, "placeholder": { "en": "e.g. 1", "nl": "bijv. 1" } },
+          { "type": "text", "name": "value", "title": { "en": "Value", "nl": "Waarde" }, "placeholder": { "en": "e.g. true", "nl": "bijv. true" } }
+        ]
+      },
+      {
+        "id": "refresh_status",
+        "title": { "en": "Refresh device status", "nl": "Ververs apparaatstatus" },
+        "hint": { "en": "Request a fresh status update from the Tuya device.", "nl": "Vraag een nieuwe statusupdate op van het Tuya-apparaat." },
+        "args": [{ "type": "device", "name": "device", "filter": "driver_id=socket|light|fan|climate" }]
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "name": { "en": "Tuya Socket", "nl": "Tuya Stopcontact" },
+      "class": "socket",
+      "capabilities": ["onoff", "measure_power", "meter_power", "measure_current", "measure_voltage"],
+      "platforms": ["local"],
+      "connectivity": ["lan"],
+      "energy": { "cumulative": true },
+      "pair": [
+        { "id": "credentials", "navigation": { "next": "validate" } },
+        { "id": "validate", "navigation": { "prev": "credentials", "next": "list_devices" } },
+        { "id": "list_devices", "template": "list_devices", "navigation": { "next": "add_devices" } },
+        { "id": "add_devices", "template": "add_devices" }
+      ],
+      "repair": [{ "id": "repair_credentials" }],
+      "settings": [
+        {
+          "type": "group", "label": { "en": "Connection", "nl": "Verbinding" },
+          "children": [
+            { "id": "host", "type": "text", "label": { "en": "Host", "nl": "Host" }, "value": "" },
+            { "id": "device_id", "type": "text", "label": { "en": "Device ID", "nl": "Apparaat-ID" }, "value": "" },
+            { "id": "local_key", "type": "password", "label": { "en": "Local Key", "nl": "Lokale Sleutel" }, "value": "" },
+            { "id": "protocol_version", "type": "dropdown", "label": { "en": "Protocol Version", "nl": "Protocolversie" }, "values": [{ "id": "auto", "label": { "en": "Auto", "nl": "Automatisch" } }, { "id": "3.1", "label": { "en": "3.1", "nl": "3.1" } }, { "id": "3.2", "label": { "en": "3.2", "nl": "3.2" } }, { "id": "3.3", "label": { "en": "3.3", "nl": "3.3" } }, { "id": "3.4", "label": { "en": "3.4", "nl": "3.4" } }, { "id": "3.5", "label": { "en": "3.5", "nl": "3.5" } }], "value": "auto" },
+            { "id": "node_id", "type": "text", "label": { "en": "Node ID", "nl": "Node-ID" }, "value": "" }
+          ]
+        },
+        {
+          "type": "group", "label": { "en": "Polling", "nl": "Polling" },
+          "children": [
+            { "id": "poll_interval", "type": "number", "label": { "en": "Poll Interval (s)", "nl": "Pollinterval (s)" }, "value": 30, "min": 5, "max": 300 }
+          ]
+        }
+      ],
+      "id": "socket"
+    },
+    {
+      "name": { "en": "Tuya Light", "nl": "Tuya Lamp" },
+      "class": "light",
+      "capabilities": ["onoff", "dim", "light_temperature", "light_hue", "light_saturation", "light_mode"],
+      "platforms": ["local"],
+      "connectivity": ["lan"],
+      "pair": [
+        { "id": "credentials", "navigation": { "next": "validate" } },
+        { "id": "validate", "navigation": { "prev": "credentials", "next": "list_devices" } },
+        { "id": "list_devices", "template": "list_devices", "navigation": { "next": "add_devices" } },
+        { "id": "add_devices", "template": "add_devices" }
+      ],
+      "repair": [{ "id": "repair_credentials" }],
+      "settings": [
+        {
+          "type": "group", "label": { "en": "Connection", "nl": "Verbinding" },
+          "children": [
+            { "id": "host", "type": "text", "label": { "en": "Host", "nl": "Host" }, "value": "" },
+            { "id": "device_id", "type": "text", "label": { "en": "Device ID", "nl": "Apparaat-ID" }, "value": "" },
+            { "id": "local_key", "type": "password", "label": { "en": "Local Key", "nl": "Lokale Sleutel" }, "value": "" },
+            { "id": "protocol_version", "type": "dropdown", "label": { "en": "Protocol Version", "nl": "Protocolversie" }, "values": [{ "id": "auto", "label": { "en": "Auto", "nl": "Automatisch" } }, { "id": "3.1", "label": { "en": "3.1", "nl": "3.1" } }, { "id": "3.2", "label": { "en": "3.2", "nl": "3.2" } }, { "id": "3.3", "label": { "en": "3.3", "nl": "3.3" } }, { "id": "3.4", "label": { "en": "3.4", "nl": "3.4" } }, { "id": "3.5", "label": { "en": "3.5", "nl": "3.5" } }], "value": "auto" },
+            { "id": "node_id", "type": "text", "label": { "en": "Node ID", "nl": "Node-ID" }, "value": "" }
+          ]
+        },
+        {
+          "type": "group", "label": { "en": "Polling", "nl": "Polling" },
+          "children": [
+            { "id": "poll_interval", "type": "number", "label": { "en": "Poll Interval (s)", "nl": "Pollinterval (s)" }, "value": 30, "min": 5, "max": 300 }
+          ]
+        }
+      ],
+      "id": "light"
+    },
+    {
+      "name": { "en": "Tuya Fan", "nl": "Tuya Ventilator" },
+      "class": "fan",
+      "capabilities": ["onoff", "dim"],
+      "platforms": ["local"],
+      "connectivity": ["lan"],
+      "pair": [
+        { "id": "credentials", "navigation": { "next": "validate" } },
+        { "id": "validate", "navigation": { "prev": "credentials", "next": "list_devices" } },
+        { "id": "list_devices", "template": "list_devices", "navigation": { "next": "add_devices" } },
+        { "id": "add_devices", "template": "add_devices" }
+      ],
+      "repair": [{ "id": "repair_credentials" }],
+      "settings": [
+        {
+          "type": "group", "label": { "en": "Connection", "nl": "Verbinding" },
+          "children": [
+            { "id": "host", "type": "text", "label": { "en": "Host", "nl": "Host" }, "value": "" },
+            { "id": "device_id", "type": "text", "label": { "en": "Device ID", "nl": "Apparaat-ID" }, "value": "" },
+            { "id": "local_key", "type": "password", "label": { "en": "Local Key", "nl": "Lokale Sleutel" }, "value": "" },
+            { "id": "protocol_version", "type": "dropdown", "label": { "en": "Protocol Version", "nl": "Protocolversie" }, "values": [{ "id": "auto", "label": { "en": "Auto", "nl": "Automatisch" } }, { "id": "3.1", "label": { "en": "3.1", "nl": "3.1" } }, { "id": "3.2", "label": { "en": "3.2", "nl": "3.2" } }, { "id": "3.3", "label": { "en": "3.3", "nl": "3.3" } }, { "id": "3.4", "label": { "en": "3.4", "nl": "3.4" } }, { "id": "3.5", "label": { "en": "3.5", "nl": "3.5" } }], "value": "auto" },
+            { "id": "node_id", "type": "text", "label": { "en": "Node ID", "nl": "Node-ID" }, "value": "" }
+          ]
+        },
+        {
+          "type": "group", "label": { "en": "Polling", "nl": "Polling" },
+          "children": [
+            { "id": "poll_interval", "type": "number", "label": { "en": "Poll Interval (s)", "nl": "Pollinterval (s)" }, "value": 30, "min": 5, "max": 300 }
+          ]
+        }
+      ],
+      "id": "fan"
+    },
+    {
+      "name": { "en": "Tuya Climate", "nl": "Tuya Klimaat" },
+      "class": "thermostat",
+      "capabilities": ["onoff", "target_temperature", "measure_temperature"],
+      "platforms": ["local"],
+      "connectivity": ["lan"],
+      "pair": [
+        { "id": "credentials", "navigation": { "next": "validate" } },
+        { "id": "validate", "navigation": { "prev": "credentials", "next": "list_devices" } },
+        { "id": "list_devices", "template": "list_devices", "navigation": { "next": "add_devices" } },
+        { "id": "add_devices", "template": "add_devices" }
+      ],
+      "repair": [{ "id": "repair_credentials" }],
+      "settings": [
+        {
+          "type": "group", "label": { "en": "Connection", "nl": "Verbinding" },
+          "children": [
+            { "id": "host", "type": "text", "label": { "en": "Host", "nl": "Host" }, "value": "" },
+            { "id": "device_id", "type": "text", "label": { "en": "Device ID", "nl": "Apparaat-ID" }, "value": "" },
+            { "id": "local_key", "type": "password", "label": { "en": "Local Key", "nl": "Lokale Sleutel" }, "value": "" },
+            { "id": "protocol_version", "type": "dropdown", "label": { "en": "Protocol Version", "nl": "Protocolversie" }, "values": [{ "id": "auto", "label": { "en": "Auto", "nl": "Automatisch" } }, { "id": "3.1", "label": { "en": "3.1", "nl": "3.1" } }, { "id": "3.2", "label": { "en": "3.2", "nl": "3.2" } }, { "id": "3.3", "label": { "en": "3.3", "nl": "3.3" } }, { "id": "3.4", "label": { "en": "3.4", "nl": "3.4" } }, { "id": "3.5", "label": { "en": "3.5", "nl": "3.5" } }], "value": "auto" },
+            { "id": "node_id", "type": "text", "label": { "en": "Node ID", "nl": "Node-ID" }, "value": "" }
+          ]
+        },
+        {
+          "type": "group", "label": { "en": "Polling", "nl": "Polling" },
+          "children": [
+            { "id": "poll_interval", "type": "number", "label": { "en": "Poll Interval (s)", "nl": "Pollinterval (s)" }, "value": 30, "min": 5, "max": 300 }
+          ]
+        }
+      ],
+      "id": "climate"
+    }
+  ],
+  "discovery": {
+    "tuya-mac": {
+      "type": "mac",
+      "mac": {
+        "manufacturer": [
+          [132, 240, 88],
+          [80, 232, 145],
+          [216, 31, 18],
+          [104, 87, 45],
+          [160, 146, 8],
+          [112, 62, 151]
+        ]
+      }
+    }
+  },
+  "capabilities": {
+    "measure_current": {
+      "type": "number",
+      "title": { "en": "Current", "nl": "Stroom" },
+      "units": { "en": "A", "nl": "A" },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": true,
+      "decimals": 3
+    },
+    "measure_voltage": {
+      "type": "number",
+      "title": { "en": "Voltage", "nl": "Spanning" },
+      "units": { "en": "V", "nl": "V" },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "insights": true,
+      "decimals": 1
+    }
   }
 }

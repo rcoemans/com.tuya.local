@@ -1,0 +1,18 @@
+{
+  "id": "device_connected",
+  "title": {
+    "en": "Device connected",
+    "nl": "Apparaat verbonden"
+  },
+  "hint": {
+    "en": "Triggers when the Tuya device establishes a local connection.",
+    "nl": "Wordt geactiveerd wanneer het Tuya-apparaat een lokale verbinding tot stand brengt."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=socket|light|fan|climate"
+    }
+  ]
+}

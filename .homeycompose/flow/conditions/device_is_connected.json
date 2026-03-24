@@ -1,0 +1,18 @@
+{
+  "id": "device_is_connected",
+  "title": {
+    "en": "Device !{{is|is not}} connected",
+    "nl": "Apparaat !{{is|is niet}} verbonden"
+  },
+  "hint": {
+    "en": "Checks if the Tuya device currently has an active local connection.",
+    "nl": "Controleert of het Tuya-apparaat momenteel een actieve lokale verbinding heeft."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=socket|light|fan|climate"
+    }
+  ]
+}

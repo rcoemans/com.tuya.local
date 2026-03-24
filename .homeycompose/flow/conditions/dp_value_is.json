@@ -1,0 +1,46 @@
+{
+  "id": "dp_value_is",
+  "title": {
+    "en": "Datapoint value !{{is|is not}} equal to",
+    "nl": "Datapuntwaarde !{{is|is niet}} gelijk aan"
+  },
+  "titleFormatted": {
+    "en": "Datapoint [[dp]] !{{is|is not}} [[value]]",
+    "nl": "Datapunt [[dp]] !{{is|is niet}} [[value]]"
+  },
+  "hint": {
+    "en": "Checks if a specific Tuya datapoint has a given value.",
+    "nl": "Controleert of een specifiek Tuya-datapunt een bepaalde waarde heeft."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=socket|light|fan|climate"
+    },
+    {
+      "type": "text",
+      "name": "dp",
+      "title": {
+        "en": "Datapoint",
+        "nl": "Datapunt"
+      },
+      "placeholder": {
+        "en": "e.g. 1",
+        "nl": "bijv. 1"
+      }
+    },
+    {
+      "type": "text",
+      "name": "value",
+      "title": {
+        "en": "Value",
+        "nl": "Waarde"
+      },
+      "placeholder": {
+        "en": "e.g. true",
+        "nl": "bijv. true"
+      }
+    }
+  ]
+}

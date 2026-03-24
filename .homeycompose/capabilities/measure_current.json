@@ -1,0 +1,17 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Current",
+    "nl": "Stroom"
+  },
+  "units": {
+    "en": "A",
+    "nl": "A"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/icons/power.svg",
+  "insights": true,
+  "decimals": 3
+}

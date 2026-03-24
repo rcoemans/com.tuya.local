@@ -1,0 +1,60 @@
+{
+  "id": "dp_changed",
+  "title": {
+    "en": "A datapoint changed",
+    "nl": "Een datapunt is gewijzigd"
+  },
+  "titleFormatted": {
+    "en": "Datapoint [[dp]] changed",
+    "nl": "Datapunt [[dp]] is gewijzigd"
+  },
+  "hint": {
+    "en": "Triggers when a specific Tuya datapoint value changes.",
+    "nl": "Wordt geactiveerd wanneer een specifiek Tuya-datapuntwaarde verandert."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=socket|light|fan|climate"
+    },
+    {
+      "type": "text",
+      "name": "dp",
+      "title": {
+        "en": "Datapoint",
+        "nl": "Datapunt"
+      },
+      "placeholder": {
+        "en": "e.g. 1",
+        "nl": "bijv. 1"
+      }
+    }
+  ],
+  "tokens": [
+    {
+      "name": "value",
+      "type": "string",
+      "title": {
+        "en": "Value",
+        "nl": "Waarde"
+      },
+      "example": {
+        "en": "true",
+        "nl": "true"
+      }
+    },
+    {
+      "name": "dp",
+      "type": "string",
+      "title": {
+        "en": "Datapoint",
+        "nl": "Datapunt"
+      },
+      "example": {
+        "en": "1",
+        "nl": "1"
+      }
+    }
+  ]
+}

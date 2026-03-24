@@ -1,0 +1,46 @@
+{
+  "id": "set_dp",
+  "title": {
+    "en": "Set datapoint value",
+    "nl": "Stel datapuntwaarde in"
+  },
+  "titleFormatted": {
+    "en": "Set datapoint [[dp]] to [[value]]",
+    "nl": "Stel datapunt [[dp]] in op [[value]]"
+  },
+  "hint": {
+    "en": "Set a specific Tuya datapoint to a value. For boolean use 'true' or 'false', for numbers use a numeric value.",
+    "nl": "Stel een specifiek Tuya-datapunt in op een waarde. Gebruik voor boolean 'true' of 'false', voor getallen een numerieke waarde."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=socket|light|fan|climate"
+    },
+    {
+      "type": "text",
+      "name": "dp",
+      "title": {
+        "en": "Datapoint",
+        "nl": "Datapunt"
+      },
+      "placeholder": {
+        "en": "e.g. 1",
+        "nl": "bijv. 1"
+      }
+    },
+    {
+      "type": "text",
+      "name": "value",
+      "title": {
+        "en": "Value",
+        "nl": "Waarde"
+      },
+      "placeholder": {
+        "en": "e.g. true",
+        "nl": "bijv. true"
+      }
+    }
+  ]
+}

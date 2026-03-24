@@ -1,0 +1,18 @@
+{
+  "id": "device_disconnected",
+  "title": {
+    "en": "Device disconnected",
+    "nl": "Apparaat losgekoppeld"
+  },
+  "hint": {
+    "en": "Triggers when the Tuya device loses its local connection.",
+    "nl": "Wordt geactiveerd wanneer het Tuya-apparaat de lokale verbinding verliest."
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=socket|light|fan|climate"
+    }
+  ]
+}
