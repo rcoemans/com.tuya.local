@@ -23,10 +23,27 @@ This app supports **Tuya-based Wi-Fi devices** that expose local LAN control via
 
 | Driver   | Homey Class  | Typical Devices                          |
 |----------|-------------|------------------------------------------|
-| Socket   | `socket`    | Smart plugs, power strips, switches      |
-| Light    | `light`     | Smart bulbs, LED strips, dimmers         |
-| Fan      | `fan`       | Smart fans, ventilation controllers      |
-| Climate  | `thermostat`| Thermostats, heaters, AC controllers     |
+| Socket       | `socket`    | Smart plugs, power strips, switches           |
+| Light        | `light`     | Smart bulbs, LED strips, dimmers              |
+| Fan          | `fan`       | Smart fans, ventilation controllers           |
+| Climate      | `thermostat`| Thermostats, heaters, AC controllers          |
+| Air Purifier | `fan`       | Air purifiers with PM2.5, ionizer, speed, mode|
+
+## Roadmap
+
+Table below shows Tuya categories which are suitable for local LAN control and integration with Homey.
+
+| Category       | Tuya Category | Local LAN? | Good Fit for Homey?   | Complexity |
+|----------------|---------------|------------|-----------------------|------------|
+| Humidifier     | jsq           | ✅ Yes      | ✅ Good                | Medium     |
+| Dehumidifier   | cs            | ✅ Yes      | ✅ Good                | Medium     |
+| Curtain/Blind  | cl            | ✅ Yes      | ✅ Good                | Low-Medium |
+| Garage Door    | ckmkzq        | ✅ Yes      | ✅ Good                | Low        |
+| Robot Vacuum   | sd            | ✅ Yes      | ⚠️ Complex             | High       |
+| Siren/Alarm    | sgbj          | ✅ Yes      | ✅ Good                | Low        |
+| Aroma Diffuser | xxj           | ✅ Yes      | ⚠️ Niche               | Low        |
+| Heater         | qn            | ✅ Yes      | ✅ Good (like climate) | Low        |
+| Smart Kettle   | —             | ✅ Yes      | ⚠️ Niche               | Low        |
 
 ## Requirements
 

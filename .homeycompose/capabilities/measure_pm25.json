@@ -1,0 +1,17 @@
+{
+  "type": "number",
+  "title": {
+    "en": "PM2.5",
+    "nl": "PM2.5"
+  },
+  "units": {
+    "en": "µg/m³",
+    "nl": "µg/m³"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/icons/pm25.svg",
+  "insights": true,
+  "decimals": 0
+}

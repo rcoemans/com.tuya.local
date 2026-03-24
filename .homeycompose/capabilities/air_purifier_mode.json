@@ -1,0 +1,25 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Mode",
+    "nl": "Modus"
+  },
+  "values": [
+    {
+      "id": "auto",
+      "title": { "en": "Auto", "nl": "Automatisch" }
+    },
+    {
+      "id": "manual",
+      "title": { "en": "Manual", "nl": "Handmatig" }
+    },
+    {
+      "id": "sleep",
+      "title": { "en": "Sleep", "nl": "Slaap" }
+    }
+  ],
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "icon": "/assets/icons/mode.svg"
+}

@@ -12,7 +12,7 @@
     {
       "type": "device",
       "name": "device",
-      "filter": "driver_id=socket|light|fan|climate"
+      "filter": "driver_id=socket|light|fan|climate|air_purifier"
     }
   ]
 }

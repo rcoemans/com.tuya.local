@@ -1,7 +1,7 @@
 {
   "name": {
-    "en": "Tuya Fan",
-    "nl": "Tuya Ventilator"
+    "en": "Tuya Air Purifier",
+    "nl": "Tuya Luchtreiniger"
   },
   "class": "fan",
   "platforms": ["local"],
@@ -13,7 +13,13 @@
   },
   "capabilities": [
     "onoff",
-    "dim"
+    "air_purifier_mode",
+    "air_purifier_speed",
+    "measure_pm25",
+    "air_purifier_air_quality",
+    "air_purifier_filter_life",
+    "air_purifier_child_lock",
+    "air_purifier_ionizer"
   ],
   "pair": [
     {

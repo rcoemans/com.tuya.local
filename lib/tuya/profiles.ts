@@ -89,6 +89,33 @@ export const PROFILES: Record<string, DeviceProfile> = {
     },
   },
 
+  air_purifier: {
+    id: 'air_purifier',
+    homeyClass: 'fan',
+    capabilities: [
+      'onoff',
+      'measure_pm25',
+      'air_purifier_mode',
+      'air_purifier_speed',
+      'air_purifier_filter_life',
+      'air_purifier_ionizer',
+      'air_purifier_child_lock',
+      'air_purifier_air_quality',
+    ],
+    requiredDps: ['1'],
+    optionalDps: ['2', '3', '4', '5', '6', '7', '21'],
+    mapping: {
+      onoff: { dp: '1' },
+      measure_pm25: { dp: '2' },
+      air_purifier_mode: { dp: '3' },
+      air_purifier_speed: { dp: '4' },
+      air_purifier_filter_life: { dp: '5' },
+      air_purifier_ionizer: { dp: '6' },
+      air_purifier_child_lock: { dp: '7' },
+      air_purifier_air_quality: { dp: '21' },
+    },
+  },
+
   climate_thermostat: {
     id: 'climate_thermostat',
     homeyClass: 'thermostat',

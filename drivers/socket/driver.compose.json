@@ -13,8 +13,14 @@
     "measure_current",
     "measure_voltage"
   ],
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
   "energy": {
-    "cumulative": true
+    "cumulative": true,
+    "cumulativeImportedCapability": "meter_power"
   },
   "pair": [
     {

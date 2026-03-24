@@ -1,0 +1,19 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Filter Life",
+    "nl": "Filterlevensduur"
+  },
+  "units": {
+    "en": "%",
+    "nl": "%"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/icons/filter.svg",
+  "insights": true,
+  "min": 0,
+  "max": 100,
+  "decimals": 0
+}

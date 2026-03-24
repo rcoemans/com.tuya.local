@@ -3,11 +3,12 @@ Tuya Direct — local LAN control for compatible Tuya-based devices on Homey Pro
 Connect devices directly over your local network using their device ID, local key and datapoints for faster status updates and cloud-independent control.
 
 Features:
-- 4 device drivers: Socket, Light, Fan, Climate
+- 5 device drivers: Socket, Light, Fan, Climate, Air Purifier
 - Socket: on/off, power (W), energy (kWh), current (A), voltage (V)
 - Light: on/off, brightness, color temperature, hue, saturation, light mode
 - Fan: on/off, speed control
 - Climate: on/off, target temperature, measured temperature
+- Air Purifier: on/off, mode, fan speed, PM2.5, air quality, filter life, child lock, ionizer
 - Persistent TCP connection with heartbeat and automatic reconnect
 - Fallback polling when push updates are unreliable
 - Protocol support: 3.1, 3.2, 3.3, 3.4, 3.5
@@ -24,10 +25,11 @@ Supported devices:
 - Tuya-based Wi-Fi smart bulbs, LED strips, dimmers
 - Tuya-based Wi-Fi fans and ventilation controllers
 - Tuya-based Wi-Fi thermostats, heaters, AC controllers
+- Tuya-based Wi-Fi air purifiers
 
 Setup:
 1. Install the app on your Homey
-2. Add a new device: Tuya Direct > Socket / Light / Fan / Climate
+2. Add a new device: Tuya Direct > Socket / Light / Fan / Climate / Air Purifier
 3. Enter device credentials: host (IP address), device ID, local key, protocol version
 4. The app validates the connection and discovers available datapoints
 5. Confirm the device to complete pairing
