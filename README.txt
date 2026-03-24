@@ -1,0 +1,1 @@
+Adds local LAN control for compatible Tuya-based devices on Homey Pro. Connect devices directly over your local network using their device ID, local key and datapoints for faster status updates and cloud-independent control.
