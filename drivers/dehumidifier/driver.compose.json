@@ -1,0 +1,54 @@
+{
+  "name": {
+    "en": "Tuya Dehumidifier",
+    "nl": "Tuya Luchtontvochtiger"
+  },
+  "class": "fan",
+  "platforms": ["local"],
+  "connectivity": ["lan"],
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
+  "capabilities": [
+    "onoff",
+    "dehumidifier_mode",
+    "dehumidifier_fan_speed",
+    "target_humidity",
+    "measure_humidity",
+    "measure_temperature",
+    "dehumidifier_anion"
+  ],
+  "pair": [
+    {
+      "id": "credentials",
+      "navigation": {
+        "next": "validate"
+      }
+    },
+    {
+      "id": "validate",
+      "navigation": {
+        "prev": "credentials",
+        "next": "list_devices"
+      }
+    },
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "repair": [
+    {
+      "id": "repair_credentials"
+    }
+  ]
+}

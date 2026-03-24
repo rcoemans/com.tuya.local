@@ -1,0 +1,33 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Mist Mode",
+    "nl": "Nevelmodus"
+  },
+  "values": [
+    {
+      "id": "small",
+      "title": { "en": "Low", "nl": "Laag" }
+    },
+    {
+      "id": "large",
+      "title": { "en": "High", "nl": "Hoog" }
+    },
+    {
+      "id": "level_1",
+      "title": { "en": "Level 1", "nl": "Niveau 1" }
+    },
+    {
+      "id": "level_2",
+      "title": { "en": "Level 2", "nl": "Niveau 2" }
+    },
+    {
+      "id": "level_3",
+      "title": { "en": "Level 3", "nl": "Niveau 3" }
+    }
+  ],
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "icon": "/assets/icons/mist_mode.svg"
+}

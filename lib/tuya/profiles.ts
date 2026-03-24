@@ -116,6 +116,54 @@ export const PROFILES: Record<string, DeviceProfile> = {
     },
   },
 
+  humidifier: {
+    id: 'humidifier',
+    homeyClass: 'fan',
+    capabilities: [
+      'onoff',
+      'humidifier_mode',
+      'dim',
+      'target_humidity',
+      'measure_humidity',
+      'measure_temperature',
+    ],
+    requiredDps: ['1'],
+    optionalDps: ['2', '3', '4', '6', '7'],
+    mapping: {
+      onoff: { dp: '1' },
+      humidifier_mode: { dp: '2' },
+      dim: { dp: '3', transform: 'divideBy100' },
+      target_humidity: { dp: '4' },
+      measure_humidity: { dp: '6' },
+      measure_temperature: { dp: '7' },
+    },
+  },
+
+  dehumidifier: {
+    id: 'dehumidifier',
+    homeyClass: 'fan',
+    capabilities: [
+      'onoff',
+      'dehumidifier_mode',
+      'dehumidifier_fan_speed',
+      'target_humidity',
+      'measure_humidity',
+      'measure_temperature',
+      'dehumidifier_anion',
+    ],
+    requiredDps: ['1'],
+    optionalDps: ['2', '4', '5', '6', '7', '10'],
+    mapping: {
+      onoff: { dp: '1' },
+      target_humidity: { dp: '2' },
+      dehumidifier_fan_speed: { dp: '4' },
+      dehumidifier_mode: { dp: '5' },
+      measure_humidity: { dp: '6' },
+      measure_temperature: { dp: '7' },
+      dehumidifier_anion: { dp: '10' },
+    },
+  },
+
   climate_thermostat: {
     id: 'climate_thermostat',
     homeyClass: 'thermostat',

@@ -1,0 +1,53 @@
+{
+  "name": {
+    "en": "Tuya Humidifier",
+    "nl": "Tuya Luchtbevochtiger"
+  },
+  "class": "fan",
+  "platforms": ["local"],
+  "connectivity": ["lan"],
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
+  "capabilities": [
+    "onoff",
+    "humidifier_mode",
+    "dim",
+    "target_humidity",
+    "measure_humidity",
+    "measure_temperature"
+  ],
+  "pair": [
+    {
+      "id": "credentials",
+      "navigation": {
+        "next": "validate"
+      }
+    },
+    {
+      "id": "validate",
+      "navigation": {
+        "prev": "credentials",
+        "next": "list_devices"
+      }
+    },
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "repair": [
+    {
+      "id": "repair_credentials"
+    }
+  ]
+}

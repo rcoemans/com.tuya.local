@@ -1,0 +1,25 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Fan Speed",
+    "nl": "Ventilatorsnelheid"
+  },
+  "values": [
+    {
+      "id": "low",
+      "title": { "en": "Low", "nl": "Laag" }
+    },
+    {
+      "id": "middle",
+      "title": { "en": "Medium", "nl": "Middel" }
+    },
+    {
+      "id": "high",
+      "title": { "en": "High", "nl": "Hoog" }
+    }
+  ],
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "icon": "/assets/icons/fan_speed.svg"
+}

@@ -1,6 +1,6 @@
 {
   "1.0.0": {
-    "en": "Initial release with local LAN control for Tuya-based devices. Includes socket, light, fan, climate, and air purifier drivers with manual pairing, persistent connections, and fallback polling.",
-    "nl": "Eerste release met lokale LAN-besturing voor Tuya-apparaten. Bevat stopcontact-, lamp-, ventilator-, klimaat- en luchtreinigerdrivers met handmatige koppeling, persistente verbindingen en fallback-polling."
+    "en": "Initial release with local LAN control for Tuya-based devices. Includes socket, light, fan, climate, air purifier, humidifier, and dehumidifier drivers with manual pairing, persistent connections, and fallback polling.",
+    "nl": "Eerste release met lokale LAN-besturing voor Tuya-apparaten. Bevat stopcontact-, lamp-, ventilator-, klimaat-, luchtreiniger-, luchtbevochtiger- en luchtontvochtiger-drivers met handmatige koppeling, persistente verbindingen en fallback-polling."
   }
 }

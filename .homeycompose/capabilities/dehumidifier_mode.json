@@ -1,0 +1,29 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Mode",
+    "nl": "Modus"
+  },
+  "values": [
+    {
+      "id": "manual",
+      "title": { "en": "Manual", "nl": "Handmatig" }
+    },
+    {
+      "id": "continuous",
+      "title": { "en": "Continuous", "nl": "Continu" }
+    },
+    {
+      "id": "smart",
+      "title": { "en": "Smart", "nl": "Smart" }
+    },
+    {
+      "id": "drying",
+      "title": { "en": "Drying", "nl": "Drogen" }
+    }
+  ],
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "icon": "/assets/icons/mode.svg"
+}

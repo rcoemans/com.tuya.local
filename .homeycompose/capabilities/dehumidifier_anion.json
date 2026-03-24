@@ -1,0 +1,11 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Anion",
+    "nl": "Anion"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "toggle",
+  "icon": "/assets/icons/ionizer.svg"
+}
