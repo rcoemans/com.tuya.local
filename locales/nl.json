@@ -37,8 +37,8 @@
     }
   },
   "settings": {
-    "host": "Host",
-    "host_hint": "IP-adres of hostnaam van het Tuya-apparaat.",
+    "host": "Host / IP-adres",
+    "host_hint": "IP-adres of hostnaam van het Tuya-apparaat op je lokale netwerk.",
     "device_id": "Apparaat-ID",
     "device_id_hint": "De unieke Tuya apparaat-ID.",
     "local_key": "Lokale Sleutel",

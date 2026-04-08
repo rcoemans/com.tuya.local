@@ -2,13 +2,19 @@
 
 import Homey from 'homey';
 import type { TuyaConnection } from './lib/tuya/connection';
+import { AppLogger } from './lib/AppLogger';
 
 class TuyaDirectApp extends Homey.App {
 
   /** Shared connection registry keyed by device ID */
   public connectionRegistry: Map<string, TuyaConnection> = new Map();
 
+  /** App-level logger accessible via settings page */
+  public appLogger!: AppLogger;
+
   async onInit(): Promise<void> {
+    this.appLogger = new AppLogger(500);
+    this.appLogger.info('App', 'Tuya Direct has been initialized');
     this.log('Tuya Direct has been initialized');
     this._registerFlowCards();
   }

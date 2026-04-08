@@ -4,6 +4,7 @@ import Homey from 'homey';
 import { TuyaConnection } from './tuya/connection';
 import { inferProfile } from './tuya/profiles';
 import type { ProtocolVersion, DpsState } from './tuya/types';
+import type { AppLogger } from './AppLogger';
 
 /**
  * Base Tuya driver class shared by all drivers.
@@ -11,8 +12,17 @@ import type { ProtocolVersion, DpsState } from './tuya/types';
  */
 class TuyaDriver extends Homey.Driver {
 
+  private get _appLogger(): AppLogger | undefined {
+    return (this.homey.app as any).appLogger;
+  }
+
+  private _appLog(message: string, level: 'info' | 'warn' | 'error' = 'info'): void {
+    this._appLogger?.[level]('Driver', message);
+  }
+
   async onInit(): Promise<void> {
     this.log(`${this.constructor.name} has been initialized`);
+    this._appLog(`${this.constructor.name} initialized`);
   }
 
   async onPairListDevices(): Promise<Record<string, unknown>[]> {
@@ -48,6 +58,13 @@ class TuyaDriver extends Homey.Driver {
     });
 
     session.setHandler('validate_connection', async () => {
+      this.log('validate_connection: host=%s deviceId=%s', deviceData.host, deviceData.deviceId);
+      this._appLog(`Validating connection to ${deviceData.host} (${deviceData.deviceId})`);
+
+      if (!deviceData.host || !deviceData.deviceId || !deviceData.localKey) {
+        return { success: false, error: 'Missing required credentials (host, device ID, or local key)' };
+      }
+
       const connection = new TuyaConnection({
         host: deviceData.host,
         deviceId: deviceData.deviceId,
@@ -58,22 +75,31 @@ class TuyaDriver extends Homey.Driver {
         error: this.error.bind(this),
       });
 
+      const PAIR_VALIDATE_TIMEOUT = 12_000;
       try {
-        await connection.connect();
-        const dps = await connection.status();
-        await connection.destroy();
+        const dps = await Promise.race([
+          new Promise<DpsState>((resolve, reject) => {
+            connection.once('dps', (d: DpsState) => resolve(d));
+            connection.once('disconnected', (err: Error) => reject(err));
+            connection.connect().catch(reject);
+          }),
+          new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error('Connection timed out — device may be unreachable')), PAIR_VALIDATE_TIMEOUT),
+          ),
+        ]);
 
-        if (dps) {
-          discoveredDps = dps;
-          return { success: true, dps };
-        }
-        return { success: true, dps: {} };
+        discoveredDps = dps || {};
+        this._appLog(`Connection validated: ${Object.keys(discoveredDps).length} DPs discovered`);
+        return { success: true, dps: discoveredDps };
       } catch (err) {
-        try { await connection.destroy(); } catch { /* ignore */ }
+        const msg = err instanceof Error ? err.message : String(err);
+        this._appLog(`Connection validation failed: ${msg}`, 'error');
         return {
           success: false,
-          error: err instanceof Error ? err.message : String(err),
+          error: msg,
         };
+      } finally {
+        try { await connection.destroy(); } catch { /* ignore */ }
       }
     });
 

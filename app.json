@@ -56,6 +56,28 @@
   "bugs": {
     "url": "https://github.com/rcoemans/com.tuya.local/issues"
   },
+  "api": {
+    "getLogs": {
+      "method": "GET",
+      "path": "/getLogs"
+    },
+    "getLogsDriver": {
+      "method": "GET",
+      "path": "/getLogsDriver"
+    },
+    "getLogsDevice": {
+      "method": "GET",
+      "path": "/getLogsDevice"
+    },
+    "getLogsApp": {
+      "method": "GET",
+      "path": "/getLogsApp"
+    },
+    "clearLogs": {
+      "method": "GET",
+      "path": "/clearLogs"
+    }
+  },
   "flow": {
     "triggers": [
       {

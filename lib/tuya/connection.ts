@@ -86,16 +86,19 @@ export class TuyaConnection extends EventEmitter {
 
     try {
       await this._createSocket();
+      this._log('Socket created, negotiating session (protocol %s)...', this._protocolVersion);
       await this._negotiateSession();
       this._connected = true;
       this._connecting = false;
       this._reconnectAttempt = 0;
       this._startHeartbeat();
       this._startPolling();
+      this._log('Emitting connected, sending initial status query...');
       this.emit('connected');
 
       // Initial status query
       const dps = await this.status();
+      this._log('Status query returned: %s', dps ? JSON.stringify(dps) : 'null');
       if (dps) {
         this.emit('dps', dps);
       }
@@ -290,7 +293,7 @@ export class TuyaConnection extends EventEmitter {
   private _onData(data: Buffer): void {
     this._receiveBuffer = Buffer.from(Buffer.concat([this._receiveBuffer, data]));
 
-    const { messages, remaining } = parseMessages(this._receiveBuffer);
+    const { messages, remaining } = parseMessages(this._receiveBuffer, this._protocolVersion);
     this._receiveBuffer = Buffer.from(remaining);
 
     for (const msg of messages) {

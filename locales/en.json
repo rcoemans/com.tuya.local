@@ -37,8 +37,8 @@
     }
   },
   "settings": {
-    "host": "Host",
-    "host_hint": "IP address or hostname of the Tuya device.",
+    "host": "Host / IP Address",
+    "host_hint": "IP address or hostname of the Tuya device on your local network.",
     "device_id": "Device ID",
     "device_id_hint": "The unique Tuya device identifier.",
     "local_key": "Local Key",

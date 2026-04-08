@@ -40,53 +40,46 @@
 
   <button id="retryBtn" class="btn" style="display:none;" data-i18n="pair.validate.retry">Retry</button>
 
-  <script>
-    function onHomeyReady(Homey) {
-      Homey.ready();
+  <script type="application/javascript">
+    var statusBox = document.getElementById('statusBox');
+    var dpsContainer = document.getElementById('dpsContainer');
+    var dpsBody = document.getElementById('dpsBody');
+    var retryBtn = document.getElementById('retryBtn');
 
-      var statusBox = document.getElementById('statusBox');
-      var dpsContainer = document.getElementById('dpsContainer');
-      var dpsBody = document.getElementById('dpsBody');
-      var retryBtn = document.getElementById('retryBtn');
+    function validate() {
+      statusBox.className = 'status info';
+      statusBox.innerHTML = '<span class="spinner"></span> Connecting to device...';
+      dpsContainer.style.display = 'none';
+      retryBtn.style.display = 'none';
 
-      function validate() {
-        statusBox.className = 'status info';
-        statusBox.innerHTML = '<span class="spinner"></span> Connecting to device...';
-        dpsContainer.style.display = 'none';
-        retryBtn.style.display = 'none';
+      Homey.emit('validate_connection').then(function(result) {
+        if (result && result.success) {
+          statusBox.className = 'status success';
+          statusBox.textContent = 'Connection successful!';
 
-        Homey.emit('validate_connection', null, function(err, result) {
-          if (err) {
-            statusBox.className = 'status error';
-            statusBox.textContent = 'Error: ' + (err.message || err);
-            retryBtn.style.display = 'block';
-            return;
+          if (result.dps && Object.keys(result.dps).length > 0) {
+            dpsBody.innerHTML = '';
+            Object.entries(result.dps).forEach(function(entry) {
+              var row = document.createElement('tr');
+              row.innerHTML = '<td>' + entry[0] + '</td><td>' + JSON.stringify(entry[1]) + '</td><td>' + typeof entry[1] + '</td>';
+              dpsBody.appendChild(row);
+            });
+            dpsContainer.style.display = 'block';
           }
-
-          if (result && result.success) {
-            statusBox.className = 'status success';
-            statusBox.textContent = 'Connection successful!';
-
-            if (result.dps && Object.keys(result.dps).length > 0) {
-              dpsBody.innerHTML = '';
-              Object.entries(result.dps).forEach(function(entry) {
-                var row = document.createElement('tr');
-                row.innerHTML = '<td>' + entry[0] + '</td><td>' + JSON.stringify(entry[1]) + '</td><td>' + typeof entry[1] + '</td>';
-                dpsBody.appendChild(row);
-              });
-              dpsContainer.style.display = 'block';
-            }
-          } else {
-            statusBox.className = 'status error';
-            statusBox.textContent = 'Connection failed: ' + (result && result.error ? result.error : 'Unknown error');
-            retryBtn.style.display = 'block';
-          }
-        });
-      }
-
-      retryBtn.addEventListener('click', validate);
-      validate();
+        } else {
+          statusBox.className = 'status error';
+          statusBox.textContent = 'Connection failed: ' + (result && result.error ? result.error : 'Unknown error');
+          retryBtn.style.display = 'block';
+        }
+      }).catch(function(err) {
+        statusBox.className = 'status error';
+        statusBox.textContent = 'Error: ' + (err.message || err);
+        retryBtn.style.display = 'block';
+      });
     }
+
+    retryBtn.addEventListener('click', validate);
+    validate();
   </script>
 </body>
 </html>

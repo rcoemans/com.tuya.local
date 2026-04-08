@@ -5,6 +5,7 @@ import { TuyaConnection } from './tuya/connection';
 import { dpToCapability, capabilityToDp, buildMapping } from './tuya/mapper';
 import { getProfile } from './tuya/profiles';
 import type { DpsState, CapabilityDpMapping, ProtocolVersion } from './tuya/types';
+import type { AppLogger } from './AppLogger';
 
 /**
  * Base Tuya device class shared by all drivers.
@@ -15,6 +16,14 @@ class TuyaDevice extends Homey.Device {
   protected connection!: TuyaConnection;
   protected mapping: Record<string, CapabilityDpMapping> = {};
   private _lastDps: DpsState = {};
+
+  private get _appLogger(): AppLogger | undefined {
+    return (this.homey.app as any).appLogger;
+  }
+
+  private _appLog(message: string, level: 'info' | 'warn' | 'error' = 'info'): void {
+    this._appLogger?.[level]('Device', message);
+  }
 
   async onInit(): Promise<void> {
     const settings = this.getSettings();
@@ -44,12 +53,14 @@ class TuyaDevice extends Homey.Device {
 
     // Connection events
     this.connection.on('connected', async () => {
+      this._appLog(`${this.getName()} connected to ${settings.host}`);
       await this.setAvailable();
       this.homey.flow.getDeviceTriggerCard('device_connected')
         .trigger(this).catch((err: Error) => this.error('Trigger device_connected failed:', err));
     });
 
     this.connection.on('disconnected', async (err?: Error) => {
+      this._appLog(`${this.getName()} disconnected: ${err?.message || 'unknown'}`, 'warn');
       await this.setUnavailable(err?.message || this.homey.__('errors.disconnected'));
       this.homey.flow.getDeviceTriggerCard('device_disconnected')
         .trigger(this).catch((e: Error) => this.error('Trigger device_disconnected failed:', e));
@@ -62,6 +73,7 @@ class TuyaDevice extends Homey.Device {
 
     this.connection.on('error', (err: Error) => {
       this.error('Connection error:', err.message);
+      this._appLog(`${this.getName()} error: ${err.message}`, 'error');
     });
 
     // Start connection
