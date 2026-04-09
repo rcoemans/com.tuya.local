@@ -169,9 +169,10 @@ export function decryptPayload(
  * Returns the derived session key from the local random + remote random.
  */
 export function deriveSessionKey(localRandom: Buffer, remoteRandom: Buffer, localKey: Buffer): Buffer {
-  const sessionKey = Buffer.alloc(16);
+  const xored = Buffer.alloc(16);
   for (let i = 0; i < 16; i++) {
-    sessionKey[i] = localRandom[i] ^ remoteRandom[i];
+    xored[i] = localRandom[i] ^ remoteRandom[i];
   }
-  return encryptEcb(sessionKey, localKey);
+  // Must use NoPad — encryptEcb auto-pads 16B to 32B, which is wrong for a key
+  return encryptEcbNoPad(xored, localKey);
 }

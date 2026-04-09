@@ -9,7 +9,7 @@ import {
   CONNECT_TIMEOUT,
   COMMAND_TIMEOUT,
 } from './constants';
-import { randomBytes, deriveSessionKey, decryptEcb } from './cipher';
+import { randomBytes, deriveSessionKey, decryptEcbNoPad, hmacSha256 } from './cipher';
 import {
   encodeMessage,
   parseMessages,
@@ -113,40 +113,63 @@ export class TuyaConnection extends EventEmitter {
 
   /** Send a DP_QUERY and return current datapoint values */
   async status(): Promise<DpsState | null> {
-    const payload: TuyaPayload = {
-      gwId: this._deviceId,
-      devId: this._deviceId,
-    };
+    let payload: TuyaPayload;
+    let cmd: CommandType;
 
-    if (this._nodeId) {
-      payload.uid = this._nodeId;
+    if (this._isNewProtocol()) {
+      // Protocol 3.4/3.5: DP_QUERY_NEW with empty payload
+      cmd = CommandType.DP_QUERY_NEW;
+      payload = {};
+    } else {
+      // Protocol 3.1–3.3: DP_QUERY with full device identifiers
+      cmd = CommandType.DP_QUERY;
+      payload = {
+        gwId: this._deviceId,
+        devId: this._deviceId,
+        uid: this._nodeId || this._deviceId,
+        t: Math.round(Date.now() / 1000).toString(),
+        dps: {},
+      };
     }
 
-    const cmd = this._isNewProtocol() ? CommandType.DP_QUERY_NEW : CommandType.DP_QUERY;
+    this._log('[DIAG] status() sending cmd=%d payload=%s', cmd, JSON.stringify(payload));
     const result = await this._sendCommand(cmd, payload);
+    this._log('[DIAG] status() result=%s', result ? JSON.stringify(result) : 'null');
     return result?.dps || null;
   }
 
   /** Set datapoint values on the device */
   async setDps(dps: DpsState): Promise<void> {
-    const payload: TuyaPayload = {
-      devId: this._deviceId,
-      gwId: this._deviceId,
-      uid: this._nodeId || this._deviceId,
-      t: Math.floor(Date.now() / 1000).toString(),
-      dps,
-    };
-
-    const cmd = this._isNewProtocol() ? CommandType.CONTROL_NEW : CommandType.CONTROL;
-    await this._sendCommand(cmd, payload);
+    if (this._isNewProtocol()) {
+      // Protocol 3.4/3.5: CONTROL_NEW with {protocol:5, t:<int>, data:{dps:{...}}}
+      // Fire-and-forget — device responds with async STATUS push, not a CONTROL echo
+      const payload = {
+        protocol: 5,
+        t: Math.floor(Date.now() / 1000),
+        data: { dps },
+      } as unknown as TuyaPayload;
+      const msg = encodeMessage(CommandType.CONTROL_NEW, payload, this._localKey, this._protocolVersion, this._sessionKey);
+      this._write(msg);
+    } else {
+      // Protocol 3.1–3.3: CONTROL with standard payload, wait for response
+      const payload: TuyaPayload = {
+        devId: this._deviceId,
+        gwId: this._deviceId,
+        uid: this._nodeId || this._deviceId,
+        t: Math.floor(Date.now() / 1000).toString(),
+        dps,
+      };
+      await this._sendCommand(CommandType.CONTROL, payload);
+    }
   }
 
   /** Request async DP refresh */
   async refreshDps(dpIds: number[]): Promise<void> {
     const payload: TuyaPayload = {
-      devId: this._deviceId,
       gwId: this._deviceId,
+      devId: this._deviceId,
       uid: this._nodeId || this._deviceId,
+      t: Math.round(Date.now() / 1000).toString(),
       dpId: dpIds,
     };
 
@@ -228,7 +251,8 @@ export class TuyaConnection extends EventEmitter {
       return;
     }
 
-    this._log('Negotiating session key for protocol', this._protocolVersion);
+    this._log('Negotiating session key for protocol %s (key length=%d, key hex=%s)',
+      this._protocolVersion, this._localKey.length, this._localKey.toString('hex'));
 
     const localRandom = randomBytes(16);
     const startMsg = buildSessionKeyStart(localRandom, this._localKey);
@@ -236,11 +260,27 @@ export class TuyaConnection extends EventEmitter {
 
     // Wait for SESS_KEY_NEG_RES
     const response = await this._waitForCommand(CommandType.SESS_KEY_NEG_RES, 5000);
-    if (!response || response.payload.length < 32) {
+    if (!response || response.payload.length < 48) {
+      this._log('[DIAG] SESS_KEY_NEG_RES payload length: %d', response?.payload.length ?? 0);
       throw new Error('Invalid session key negotiation response');
     }
 
-    const remoteRandom = decryptEcb(response.payload.subarray(0, 16), this._localKey);
+    // Decrypt the entire RESP payload (ECB, no auto-padding)
+    const decrypted = decryptEcbNoPad(response.payload, this._localKey);
+    const remoteRandom = decrypted.subarray(0, 16);
+    const remoteHmac = decrypted.subarray(16, 48);
+
+    // Verify HMAC: device sends HMAC(localKey, localRandom) for authentication
+    const expectedHmac = hmacSha256(localRandom, this._localKey);
+    if (!remoteHmac.equals(expectedHmac)) {
+      this._log('[DIAG] HMAC mismatch in session negotiation (wrong local key?)');
+      throw new Error('Session key HMAC verification failed');
+    }
+
+    this._log('[DIAG] Session nonce local=%s remote=%s',
+      localRandom.toString('hex').substring(0, 8),
+      remoteRandom.toString('hex').substring(0, 8));
+
     this._sessionKey = deriveSessionKey(localRandom, remoteRandom, this._localKey);
 
     const finishMsg = buildSessionKeyFinish(localRandom, remoteRandom, this._localKey);
@@ -291,6 +331,7 @@ export class TuyaConnection extends EventEmitter {
   }
 
   private _onData(data: Buffer): void {
+    this._log('[DIAG RX] %d bytes: %s', data.length, data.subarray(0, Math.min(64, data.length)).toString('hex'));
     this._receiveBuffer = Buffer.from(Buffer.concat([this._receiveBuffer, data]));
 
     const { messages, remaining } = parseMessages(this._receiveBuffer, this._protocolVersion);
@@ -303,6 +344,9 @@ export class TuyaConnection extends EventEmitter {
   }
 
   private _handleMessage(msg: TuyaMessage): void {
+    this._log('[DIAG MSG] cmd=%d seq=%d retCode=%d payloadLen=%d payload=%s',
+      msg.commandType, msg.seqNo, msg.returnCode, msg.payload.length,
+      msg.payload.subarray(0, Math.min(48, msg.payload.length)).toString('hex'));
     switch (msg.commandType) {
       case CommandType.HEART_BEAT: {
         this._onHeartbeatResponse();
@@ -438,6 +482,7 @@ export class TuyaConnection extends EventEmitter {
 
   private _write(data: Buffer): void {
     if (this._socket && !this._socket.destroyed) {
+      this._log('[DIAG TX] %d bytes: %s', data.length, data.subarray(0, Math.min(64, data.length)).toString('hex'));
       this._socket.write(data);
     }
   }

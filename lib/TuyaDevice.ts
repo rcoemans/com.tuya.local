@@ -96,15 +96,20 @@ class TuyaDevice extends Homey.Device {
 
   /** Apply incoming DP values to Homey capabilities */
   protected async _applyDps(dps: DpsState): Promise<void> {
+    this.log('[DIAG] _applyDps raw dps=%s mapping=%s', JSON.stringify(dps), JSON.stringify(this.mapping));
     const updates = dpToCapability(dps, this.mapping);
+    this.log('[DIAG] _applyDps updates=%s', JSON.stringify(updates));
 
     for (const [capabilityId, value] of Object.entries(updates)) {
       if (this.hasCapability(capabilityId)) {
         try {
+          this.log('[DIAG] setCapabilityValue(%s, %s) type=%s', capabilityId, JSON.stringify(value), typeof value);
           await this.setCapabilityValue(capabilityId, value as string | number | boolean | null);
         } catch (err) {
           this.error(`Failed to set ${capabilityId}:`, err);
         }
+      } else {
+        this.log('[DIAG] hasCapability(%s) = false, skipping', capabilityId);
       }
     }
   }
@@ -117,6 +122,7 @@ class TuyaDevice extends Homey.Device {
       this.registerCapabilityListener(capabilityId, async (value: unknown) => {
         try {
           const dpCommand = capabilityToDp(capabilityId, value, this.mapping);
+          this.log('[DIAG] capabilityListener %s value=%s -> dpCommand=%s', capabilityId, JSON.stringify(value), JSON.stringify(dpCommand));
           await this.connection.setDps(dpCommand);
         } catch (err) {
           this.error(`Failed to set ${capabilityId}:`, err);

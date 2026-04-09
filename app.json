@@ -2082,9 +2082,9 @@
       "setable": true,
       "uiComponent": "slider",
       "icon": "/assets/icons/humidity.svg",
-      "min": 30,
-      "max": 90,
-      "step": 5,
+      "min": 0.3,
+      "max": 0.9,
+      "step": 0.05,
       "decimals": 0
     }
   },

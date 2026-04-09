@@ -111,7 +111,7 @@ function _encode31(
   return _frame55aa(seqNo, command, encoded, (buf) => {
     const c = crc32(buf);
     const crcBuf = Buffer.alloc(4);
-    crcBuf.writeInt32BE(c, 0);
+    crcBuf.writeUInt32BE(c, 0);
     return crcBuf;
   });
 }
@@ -142,7 +142,7 @@ function _encode33(
   return _frame55aa(seqNo, command, encrypted, (buf) => {
     const c = crc32(buf);
     const crcBuf = Buffer.alloc(4);
-    crcBuf.writeInt32BE(c, 0);
+    crcBuf.writeUInt32BE(c, 0);
     return crcBuf;
   });
 }
@@ -330,8 +330,8 @@ export function parseMessages(data: Buffer, protocolVersion?: ProtocolVersion): 
       const returnCode = data.readUInt32BE(offset + HEADER_SIZE);
       const payloadStart = offset + HEADER_SIZE;
 
-      // For 3.4: footer is 0x24 (HMAC 32 + suffix 4)
-      // For others: footer is 0x08 (CRC 4 + suffix 4)
+      // For 3.4: ALL 55AA messages (including session negotiation) use HMAC footer (0x24 = 36 bytes)
+      // For 3.1–3.3: CRC footer (0x08 = 8 bytes)
       const tailSize = is34 ? footerSize34 : FOOTER_SIZE;
       const payloadEnd = offset + HEADER_SIZE + payloadSize - tailSize;
 
@@ -410,8 +410,11 @@ export function decodePayload(
 
       return parsed;
     }
-  } catch {
-    // Decryption or parse failed
+    // Decrypted but not JSON
+    console.error('[DIAG] decodePayload: decrypted but no JSON, str=%s', str.substring(0, 80));
+  } catch (err) {
+    console.error('[DIAG] decodePayload failed: cmd=%d payloadLen=%d err=%s',
+      message.commandType, message.payload.length, err instanceof Error ? err.message : String(err));
   }
 
   return null;
@@ -421,52 +424,55 @@ export function decodePayload(
 
 /**
  * Build session key negotiation start message for protocol 3.4+.
+ * Payload = localRandom (16 bytes, already block-aligned — no PKCS7 padding).
+ * Encrypted with ECB, framed with HMAC-SHA256.
+ * Reference: tinytuya _encode_message with pad=False for session commands.
  */
 export function buildSessionKeyStart(localRandom: Buffer, localKey: Buffer): Buffer {
+  // NO padding — 16 bytes is already a multiple of AES block size
+  const encrypted = encryptEcbNoPad(localRandom, localKey);
+
   const seqNo = nextSeqNo();
-  const encrypted = encryptEcb(localRandom, localKey);
+  const buffer = Buffer.alloc(encrypted.length + 52);
 
-  const payloadLen = encrypted.length + FOOTER_SIZE;
-  const totalLen = HEADER_SIZE + encrypted.length + FOOTER_SIZE;
+  buffer.writeUInt32BE(0x000055aa, 0);
+  buffer.writeUInt32BE(seqNo, 4);
+  buffer.writeUInt32BE(CommandType.SESS_KEY_NEG_START, 8);
+  buffer.writeUInt32BE(encrypted.length + 0x24, 12);
+  encrypted.copy(buffer, 16);
 
-  const buffer = Buffer.alloc(totalLen);
-  let offset = 0;
-
-  PREFIX.copy(buffer, offset); offset += 4;
-  buffer.writeUInt32BE(seqNo, offset); offset += 4;
-  buffer.writeUInt32BE(CommandType.SESS_KEY_NEG_START, offset); offset += 4;
-  buffer.writeUInt32BE(payloadLen, offset); offset += 4;
-  encrypted.copy(buffer, offset); offset += encrypted.length;
-
-  const crcValue = crc32(buffer.subarray(0, offset));
-  buffer.writeUInt32BE(crcValue, offset); offset += 4;
-  SUFFIX.copy(buffer, offset);
+  const hmac = hmacSha256(buffer.subarray(0, encrypted.length + 16), localKey);
+  hmac.copy(buffer, encrypted.length + 16);
+  buffer.writeUInt32BE(0x0000aa55, encrypted.length + 48);
 
   return buffer;
 }
 
 /**
  * Build session key negotiation finish message for protocol 3.4+.
+ * Payload = HMAC-SHA256(localKey, remoteRandom) — 32 bytes, already block-aligned.
+ * Encrypted with ECB (no padding), framed with HMAC-SHA256.
+ * Reference: tinytuya _negotiate_session_key_generate_step_3.
  */
-export function buildSessionKeyFinish(localRandom: Buffer, remoteRandom: Buffer, localKey: Buffer): Buffer {
+export function buildSessionKeyFinish(_localRandom: Buffer, remoteRandom: Buffer, localKey: Buffer): Buffer {
+  // The payload for FINISH is HMAC(localKey, remoteRandom) = 32 bytes
+  const payload = crypto.createHmac('sha256', localKey).update(remoteRandom).digest();
+
+  // NO padding — 32 bytes is already a multiple of AES block size
+  const encrypted = encryptEcbNoPad(payload, localKey);
+
   const seqNo = nextSeqNo();
-  const hmac = crypto.createHmac('sha256', localKey).update(remoteRandom).digest();
+  const buffer = Buffer.alloc(encrypted.length + 52);
 
-  const payloadLen = hmac.length + FOOTER_SIZE;
-  const totalLen = HEADER_SIZE + hmac.length + FOOTER_SIZE;
+  buffer.writeUInt32BE(0x000055aa, 0);
+  buffer.writeUInt32BE(seqNo, 4);
+  buffer.writeUInt32BE(CommandType.SESS_KEY_NEG_FINISH, 8);
+  buffer.writeUInt32BE(encrypted.length + 0x24, 12);
+  encrypted.copy(buffer, 16);
 
-  const buffer = Buffer.alloc(totalLen);
-  let offset = 0;
-
-  PREFIX.copy(buffer, offset); offset += 4;
-  buffer.writeUInt32BE(seqNo, offset); offset += 4;
-  buffer.writeUInt32BE(CommandType.SESS_KEY_NEG_FINISH, offset); offset += 4;
-  buffer.writeUInt32BE(payloadLen, offset); offset += 4;
-  hmac.copy(buffer, offset); offset += hmac.length;
-
-  const crcValue = crc32(buffer.subarray(0, offset));
-  buffer.writeUInt32BE(crcValue, offset); offset += 4;
-  SUFFIX.copy(buffer, offset);
+  const hmac = hmacSha256(buffer.subarray(0, encrypted.length + 16), localKey);
+  hmac.copy(buffer, encrypted.length + 16);
+  buffer.writeUInt32BE(0x0000aa55, encrypted.length + 48);
 
   return buffer;
 }
