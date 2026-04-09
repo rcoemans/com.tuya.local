@@ -36,6 +36,9 @@ class TuyaDevice extends Homey.Device {
       this.mapping = buildMapping(profile, store.mapping || undefined);
     }
 
+    // Migrate renamed capabilities (target_humidity → dehumidifier_/humidifier_target_humidity)
+    await this._migrateCapabilities();
+
     // Create connection
     this.connection = new TuyaConnection({
       host: settings.host,
@@ -129,6 +132,32 @@ class TuyaDevice extends Homey.Device {
           throw err;
         }
       });
+    }
+  }
+
+  /** Migrate capabilities renamed in newer versions */
+  private async _migrateCapabilities(): Promise<void> {
+    // target_humidity was renamed to dehumidifier_target_humidity / humidifier_target_humidity
+    if (this.hasCapability('target_humidity')) {
+      // Determine which new capability name this driver uses
+      const newName = Object.keys(this.mapping).find(
+        (k) => k === 'dehumidifier_target_humidity' || k === 'humidifier_target_humidity',
+      );
+      if (newName) {
+        this.log('[MIGRATE] Removing old target_humidity, adding %s', newName);
+        await this.removeCapability('target_humidity');
+        if (!this.hasCapability(newName)) {
+          await this.addCapability(newName);
+        }
+        // Update stored mapping key
+        const store = this.getStore();
+        if (store.mapping && store.mapping.target_humidity) {
+          const dp = store.mapping.target_humidity;
+          delete store.mapping.target_humidity;
+          store.mapping[newName] = dp;
+          await this.setStoreValue('mapping', store.mapping);
+        }
+      }
     }
   }
 
