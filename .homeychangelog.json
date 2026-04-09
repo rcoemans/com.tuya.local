@@ -11,5 +11,8 @@
   },
   "1.0.3": {
     "en": "Bug fix."
+  },
+  "1.0.4": {
+    "en": "3.4 Works correctly now."
   }
 }
