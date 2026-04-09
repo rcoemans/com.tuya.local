@@ -15,7 +15,7 @@
     "onoff",
     "dehumidifier_mode",
     "dehumidifier_fan_speed",
-    "target_humidity",
+    "dehumidifier_target_humidity",
     "measure_humidity",
     "measure_temperature",
     "dehumidifier_anion"

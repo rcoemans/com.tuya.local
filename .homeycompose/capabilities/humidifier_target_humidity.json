@@ -1,0 +1,19 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Target Humidity",
+    "nl": "Doelvochtigheid"
+  },
+  "units": {
+    "en": "%",
+    "nl": "%"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "slider",
+  "icon": "/assets/icons/humidity.svg",
+  "min": 30,
+  "max": 90,
+  "step": 5,
+  "decimals": 0
+}

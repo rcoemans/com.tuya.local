@@ -13,7 +13,7 @@ class TuyaDehumidifierDriver extends TuyaDriver {
     const mapping: Record<string, string> = {};
     if ('1' in dps) mapping.onoff = '1';
     if ('2' in dps) mapping.dehumidifier_mode = '2';
-    if ('4' in dps) mapping.target_humidity = '4';
+    if ('4' in dps) mapping.dehumidifier_target_humidity = '4';
     if ('6' in dps) mapping.dehumidifier_fan_speed = '6';
     if ('10' in dps) mapping.dehumidifier_anion = '10';
     if ('103' in dps) mapping.measure_temperature = '103';

@@ -15,7 +15,7 @@
     "onoff",
     "humidifier_mode",
     "dim",
-    "target_humidity",
+    "humidifier_target_humidity",
     "measure_humidity",
     "measure_temperature"
   ],

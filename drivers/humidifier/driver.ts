@@ -14,7 +14,7 @@ class TuyaHumidifierDriver extends TuyaDriver {
     if ('1' in dps) mapping.onoff = '1';
     if ('2' in dps) mapping.humidifier_mode = '2';
     if ('3' in dps) mapping.dim = '3';
-    if ('4' in dps) mapping.target_humidity = '4';
+    if ('4' in dps) mapping.humidifier_target_humidity = '4';
     if ('6' in dps) mapping.measure_humidity = '6';
     if ('7' in dps) mapping.measure_temperature = '7';
     return mapping;
