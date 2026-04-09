@@ -164,13 +164,27 @@ python -m tinytuya wizard
 
 ## Protocol Support
 
-| Version | Status        | Notes                                    |
-|---------|---------------|------------------------------------------|
-| 3.1     | Supported     | Older devices                            |
-| 3.2     | Supported     | Less common                              |
-| 3.3     | Supported     | Most common for current devices          |
-| 3.4     | Supported     | Newer devices with session key           |
-| 3.5     | Supported     | Latest protocol with session key         |
+| Version | Status        | Encryption                    | Notes                                                                     |
+|---------|---------------|-------------------------------|---------------------------------------------------------------------------|
+| 3.1     | Supported     | AES-128-ECB + Base64          | Older devices                                                             |
+| 3.2     | Supported     | AES-128-ECB + Base64          | Less common                                                               |
+| 3.3     | Supported     | AES-128-ECB + CRC32           | Most common for current devices                                           |
+| 3.4     | ✅ **Proven**  | AES-128-ECB + HMAC-SHA256     | Newer devices with session key negotiation — **fully tested and working** |
+| 3.5     | Supported     | AES-128-GCM + HMAC-SHA256     | Latest protocol with session key and GCM encryption                       |
+
+### Protocol 3.4 — Proven Working
+
+**Tuya protocol 3.4 has been thoroughly tested and is confirmed working** with the following implementation details:
+
+- **Session Key Negotiation**: Full SESS_KEY_NEG_START/RESP/FINISH handshake with HMAC-SHA256 verification
+- **Encryption**: AES-128-ECB with manual PKCS7 padding (no auto-padding)
+- **Frame Format**: 55AA prefix, HMAC-SHA256 footer (32 bytes) instead of CRC32
+- **Payload Structure**: Version header (3.4 + 12 zero bytes) for non-session commands
+- **Commands Tested**: DP_QUERY_NEW, CONTROL_NEW, STATUS, HEART_BEAT
+- **Device Example**: Tuya dehumidifier with capabilities: on/off, mode, target humidity (30-90%), fan speed, measured humidity/temperature
+
+**Known Working Devices**:
+- Tuya dehumidifiers (tested with protocol 3.4, local key negotiation, and full DP control)
 
 ## Known Limitations
 

@@ -10,10 +10,11 @@ Features:
 - Climate: on/off, target temperature, measured temperature
 - Air Purifier: on/off, mode, fan speed, PM2.5, air quality, filter life, child lock, ionizer
 - Humidifier: on/off, mist mode, mist level, target humidity, measured humidity, temperature
-- Dehumidifier: on/off, mode, fan speed, target humidity, measured humidity, temperature, anion
+- Dehumidifier: on/off, mode, fan speed, target humidity (30-90%), measured humidity, temperature, anion
 - Persistent TCP connection with heartbeat and automatic reconnect
 - Fallback polling when push updates are unreliable
-- Protocol support: 3.1, 3.2, 3.3, 3.4, 3.5
+- Protocol support: 3.1, 3.2, 3.3, 3.4 (proven working), 3.5
+- Protocol 3.4: Full session key negotiation with HMAC-SHA256, AES-128-ECB encryption
 - Custom pairing flow with connection validation and datapoint discovery
 - Repair flow for updating host, local key, or protocol version
 - 3 flow trigger cards: device connected, device disconnected, datapoint changed

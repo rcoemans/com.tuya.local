@@ -10,10 +10,11 @@ Functies:
 - Klimaat: aan/uit, doeltemperatuur, gemeten temperatuur
 - Luchtreiniger: aan/uit, modus, ventilatorsnelheid, PM2.5, luchtkwaliteit, filterlevensduur, kinderslot, ionisator
 - Luchtbevochtiger: aan/uit, nevelmodus, nevelniveau, doelvochtigheid, gemeten vochtigheid, temperatuur
-- Luchtontvochtiger: aan/uit, modus, ventilatorsnelheid, doelvochtigheid, gemeten vochtigheid, temperatuur, anion
+- Luchtontvochtiger: aan/uit, modus, ventilatorsnelheid, doelvochtigheid (30-90%), gemeten vochtigheid, temperatuur, anion
 - Persistente TCP-verbinding met heartbeat en automatische herverbinding
 - Fallback-polling wanneer push-updates onbetrouwbaar zijn
-- Protocolondersteuning: 3.1, 3.2, 3.3, 3.4, 3.5
+- Protocolondersteuning: 3.1, 3.2, 3.3, 3.4 (bewezen werkend), 3.5
+- Protocol 3.4: Volledige sessieslutelonderhandeling met HMAC-SHA256, AES-128-ECB-codering
 - Aangepaste koppelingsstroom met verbindingsvalidatie en datapuntdetectie
 - Reparatiestroom voor het bijwerken van host, lokale sleutel of protocolversie
 - 3 flow-triggerkaarten: apparaat verbonden, apparaat losgekoppeld, datapunt gewijzigd
