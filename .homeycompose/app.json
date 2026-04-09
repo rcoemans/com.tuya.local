@@ -1,6 +1,6 @@
 {
   "id": "com.tuya.local",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "compatibility": ">=12.0.0",
   "sdk": 3,
   "runtime": "nodejs",
@@ -21,8 +21,24 @@
   ],
   "permissions": [],
   "tags": {
-    "en": ["tuya", "local", "lan", "wifi", "smart life", "smart plug", "smart light"],
-    "nl": ["tuya", "lokaal", "lan", "wifi", "smart life", "slimme stekker", "slim licht"]
+    "en": [
+      "tuya",
+      "local",
+      "lan",
+      "wifi",
+      "smart life",
+      "smart plug",
+      "smart light"
+    ],
+    "nl": [
+      "tuya",
+      "lokaal",
+      "lan",
+      "wifi",
+      "smart life",
+      "slimme stekker",
+      "slim licht"
+    ]
   },
   "images": {
     "small": "/assets/images/small.png",
