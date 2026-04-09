@@ -133,7 +133,7 @@ export const PROFILES: Record<string, DeviceProfile> = {
       onoff: { dp: '1' },
       humidifier_mode: { dp: '2' },
       dim: { dp: '3', transform: 'divideBy100' },
-      target_humidity: { dp: '4' },
+      target_humidity: { dp: '4', transform: 'divideBy100' },
       measure_humidity: { dp: '6' },
       measure_temperature: { dp: '7' },
     },
@@ -160,7 +160,7 @@ export const PROFILES: Record<string, DeviceProfile> = {
         valueMap: { '0': 'manual', '1': 'continuous', '2': 'smart', '3': 'drying' },
         reverseValueMap: { 'manual': '0', 'continuous': '1', 'smart': '2', 'drying': '3' },
       },
-      target_humidity: { dp: '4' },
+      target_humidity: { dp: '4', transform: 'divideBy100' },
       dehumidifier_fan_speed: {
         dp: '6',
         valueMap: { '1': 'low', '2': 'middle', '3': 'high' },
